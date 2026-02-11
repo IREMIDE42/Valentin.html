@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Ugochi ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif;}
+
+body{
+height:100vh;
+overflow:hidden;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+/* Background particles */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* Page system */
+.page{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+opacity:0;
+transform:translateY(40px);
+transition:.8s ease;
+}
+
+.page.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Card */
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+border-radius:20px;
+padding:35px 25px;
+max-width:600px;
+box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+/* Animated name */
+.name span{
+font-size:3rem;
+font-weight:bold;
+opacity:0;
+display:inline-block;
+transform:translateY(30px);
+animation:reveal .6s forwards;
+color:#ff6b81;
+}
+
+@keyframes reveal{
+to{opacity:1;transform:translateY(0);}
+}
+
+p{margin-top:20px;line-height:1.6;color:#eee;}
+
+button{
+margin-top:25px;
+padding:14px 28px;
+border:none;
+border-radius:40px;
+background:linear-gradient(45deg,#ff6b81,#ff9a9e);
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.signature{margin-top:20px;opacity:.8;font-style:italic;}
+
+@media(max-width:600px){
+.name span{font-size:2.2rem;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<!-- MUSIC (put your file as music.mp3) -->
+<audio id="music" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page active">
+<div class="card">
+<h1 class="name" id="name"></h1>
+<p>I made something for you…</p>
+<button onclick="nextPage()">Open ❤️</button>
+</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+<div class="card">
+<h2>Happy Valentine's Day</h2>
+<p>
+Distance can't stop love.<br>
+If anything, it makes it stronger.
+</p>
+<button onclick="nextPage()">Continue</button>
+</div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+<div class="card">
+<h2>I Miss You</h2>
+<p>
+Every day apart is one day closer<br>
+to finally being together.
+</p>
+<button onclick="nextPage()">Last Page</button>
+</div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page">
+<div class="card">
+<h2>I Love You, Ugochi ❤️</h2>
+<p>
+No matter the distance,<br>
+you’re always with me.
+</p>
+
+<div class="signature">
+Yours Sincerely,<br>
+<b>Mide</b>
+</div>
+</div>
+</div>
+
+<script>
+/* ---------- PAGE NAVIGATION (FIXED) ---------- */
+let current = 0;
+const pages = document.querySelectorAll(".page");
+
+function nextPage(){
+if(current === 0){
+/* play music only after first click (mobile-safe) */
+const music = document.getElementById("music");
+music.play().catch(()=>{});
+}
+
+/* Prevent going past last page */
+if(current < pages.length - 1){
+pages[current].classList.remove("active");
+current++;
+pages[current].classList.add("active");
+}
+}
+
+/* ---------- NAME ANIMATION ---------- */
+const name="UGOCHI";
+const nameBox=document.getElementById("name");
+
+name.split("").forEach((l,i)=>{
+const span=document.createElement("span");
+span.textContent=l;
+span.style.animationDelay=(i*0.2)+"s";
+nameBox.appendChild(span);
+});
+
+/* ---------- PARTICLE BACKGROUND ---------- */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+let particles=[];
+for(let i=0;i<70;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2+0.5,
+d:Math.random()*0.7+0.2
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.6)";
+
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+
+p.y+=p.d;
+if(p.y>canvas.height)p.y=0;
+});
+
+requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
